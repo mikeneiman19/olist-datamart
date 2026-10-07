@@ -1,0 +1,11 @@
+Cargando dimensiones...
+COPY 1096
+COPY 32952
+COPY 3096
+COPY 96096
+COPY 19
+COPY 12
+Cargando tabla de hechos...
+COPY 113425
+ANALYZE
+Carga finalizada. Ejecuta 03_validacion.sql para verificar.

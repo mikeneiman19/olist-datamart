@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "BI Olist (Docker)",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "bi_database",
+      "Username": "bi_user",
+      "SSLMode": "prefer"
+    }
+  }
+}

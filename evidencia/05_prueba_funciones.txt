@@ -1,0 +1,93 @@
+--- fn_kpis() todo el periodo ---
+ ingresos_totales | total_pedidos | ticket_promedio | pct_entregas_a_tiempo | tiempo_prom_entrega_dias | puntaje_prom_resena | pct_clientes_recurrentes | pct_cancelacion 
+------------------+---------------+-----------------+-----------------------+--------------------------+---------------------+--------------------------+-----------------
+      13494400.74 |         99441 |          137.41 |                 91.89 |                    12.09 |                4.09 |                     3.04 |            1.24
+(1 row)
+
+--- fn_kpis() con filtros: 2017-01-01 a 2018-08-31, estado SP ---
+ ingresos_totales | total_pedidos | ticket_promedio | pct_entregas_a_tiempo | tiempo_prom_entrega_dias | puntaje_prom_resena | pct_clientes_recurrentes | pct_cancelacion 
+------------------+---------------+-----------------+-----------------------+--------------------------+---------------------+--------------------------+-----------------
+       5152573.38 |         41626 |          125.59 |                 94.10 |                     8.28 |                4.18 |                     3.15 |            1.44
+(1 row)
+
+--- fn_ventas_por_mes() (primeros 6 meses) ---
+ anio_mes | ingresos  | pedidos | ticket_promedio 
+----------+-----------+---------+-----------------
+ 2016-09  |    207.86 |       2 |          103.93
+ 2016-10  |  44507.30 |     293 |          151.90
+ 2016-12  |     10.90 |       1 |           10.90
+ 2017-01  | 120098.27 |     787 |          152.60
+ 2017-02  | 244959.35 |    1718 |          142.58
+ 2017-03  | 368341.32 |    2617 |          140.75
+(6 rows)
+
+--- fn_ventas_por_categoria() top 5 ---
+       categoria       |  ingresos  | pedidos | items 
+-----------------------+------------+---------+-------
+ health_beauty         | 1255695.13 |    8800 |  9634
+ watches_gifts         | 1198185.21 |    5604 |  5970
+ bed_bath_table        | 1035964.06 |    9399 | 11097
+ sports_leisure        |  979740.92 |    7673 |  8590
+ computers_accessories |  904322.02 |    6654 |  7781
+(5 rows)
+
+--- fn_logistica_por_estado() ---
+ estado_cliente | pedidos_entregados | pct_a_tiempo | dias_prom_entrega | dias_retraso_prom 
+----------------+--------------------+--------------+-------------------+-------------------
+ AL             |                397 |        76.07 |             24.04 |             -7.71
+ MA             |                720 |        80.42 |             21.08 |             -8.58
+ PI             |                476 |        84.03 |             18.99 |            -10.31
+ CE             |               1281 |        84.70 |             20.80 |             -9.81
+ SE             |                336 |        84.82 |             20.99 |             -9.08
+ BA             |               3254 |        85.96 |             18.87 |             -9.79
+ RJ             |              12351 |        86.52 |             14.85 |            -10.76
+ TO             |                274 |        87.23 |             17.23 |            -11.13
+ PA             |                946 |        87.63 |             23.32 |            -13.07
+ ES             |               1996 |        87.78 |             15.34 |             -9.49
+(10 rows)
+
+--- fn_top_vendedores() top 5 ---
+            seller_id             |      ciudad      | estado | ingresos  | pedidos | pct_a_tiempo | puntaje_prom 
+----------------------------------+------------------+--------+-----------+---------+--------------+--------------
+ 4869f7a5dfa277a7dca6462dcf3b52b2 | guariba          | SP     | 229237.63 |    1131 |        88.43 |         4.14
+ 53243585a1d6dc2643021fd1853d8905 | lauro de freitas | BA     | 222776.05 |     358 |        95.69 |         4.13
+ 4a3ca9315b744ce9f8e9374361493884 | ibitinga         | SP     | 200326.12 |    1804 |        89.00 |         3.83
+ fa1c13f2614d7b5c4749cbc52fecda94 | sumare           | SP     | 192842.13 |     584 |        89.79 |         4.34
+ 7c67e1448b00f6e969d365cea6b010ab | itaquaquecetuba  | SP     | 187923.89 |     982 |        89.93 |         3.49
+(5 rows)
+
+--- fn_pagos_por_tipo() ---
+  tipo_pago  | rango_cuotas | pedidos |  ingresos  | ticket_promedio 
+-------------+--------------+---------+------------+-----------------
+ credit_card | 1 (contado)  |   23697 | 1955901.34 |           82.54
+ credit_card | 2-3          |   22399 | 2550445.40 |          113.86
+ boleto      | 1 (contado)  |   19539 | 2377567.71 |          121.68
+ credit_card | 4-6          |   15974 | 2512478.91 |          157.29
+ credit_card | 7-12         |   11823 | 3552990.77 |          300.52
+ voucher     | 1 (contado)  |    2867 |  254323.23 |           88.71
+ debit_card  | 1 (contado)  |    1514 |  181110.72 |          119.62
+ credit_card | 13-24        |     183 |   69432.61 |          379.41
+ voucher     | 2-3          |     150 |   26911.97 |          179.41
+ voucher     | 4-6          |      48 |    9227.21 |          192.23
+(10 rows)
+
+--- fn_resena_vs_entrega() ---
+ review_score | pedidos | dias_prom_entrega | pct_con_retraso 
+--------------+---------+-------------------+-----------------
+            1 |    9351 |             20.86 |           37.86
+            2 |    2921 |             16.18 |           20.61
+            3 |    7916 |             13.79 |           11.02
+            4 |   18888 |             11.84 |            5.00
+            5 |   56748 |             10.22 |            3.00
+(5 rows)
+
+--- fn_detalle_pedidos() 5 filas ---
+             order_id             |   fecha    | categoria | estado_cliente | estado_pedido | price | freight_value | review_score | dias_entrega | dias_retraso | tipo_pago 
+----------------------------------+------------+-----------+----------------+---------------+-------+---------------+--------------+--------------+--------------+-----------
+ 10a045cdf6a5650c21e9cfeb60384c16 | 2018-10-17 | sin_item  | SP             | canceled      |  0.00 |          0.00 |            1 |              |              | voucher
+ b059ee4de278302d550a3035c4cdb740 | 2018-10-16 | sin_item  | PI             | canceled      |  0.00 |          0.00 |            5 |              |              | voucher
+ a2ac6dad85cf8af5b0afb510a240fe8c | 2018-10-03 | sin_item  | SP             | canceled      |  0.00 |          0.00 |            1 |              |              | voucher
+ 616fa7d4871b87832197b2a137a115d2 | 2018-10-01 | sin_item  | RJ             | canceled      |  0.00 |          0.00 |            2 |              |              | voucher
+ 392ed9afd714e3c74767d0c4d3e3f477 | 2018-09-29 | sin_item  | SP             | canceled      |  0.00 |          0.00 |            1 |              |              | voucher
+(5 rows)
+

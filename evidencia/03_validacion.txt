@@ -1,0 +1,86 @@
+       tabla       | filas  
+-------------------+--------
+ dim_estado_pedido |     12
+ dim_pago          |     19
+ dim_tiempo        |   1096
+ dim_vendedor      |   3096
+ dim_producto      |  32952
+ dim_cliente       |  96096
+ fact_ventas       | 113425
+(7 rows)
+
+      control       | resultado 
+--------------------+-----------
+ huerfanos estado   |         0
+ huerfanos pago     |         0
+ huerfanos tiempo   |         0
+ huerfanos producto |         0
+ huerfanos vendedor |         0
+ huerfanos cliente  |         0
+(6 rows)
+
+ grano_duplicado 
+-----------------
+               0
+(1 row)
+
+ pedidos_mal_marcados 
+----------------------
+                    0
+(1 row)
+
+ total_item_inconsistente 
+--------------------------
+                        0
+(1 row)
+
+ productos_sin_ventas 
+----------------------
+                    0
+(1 row)
+
+ filas_sin_resena | filas_sin_dias_entrega | filas_sin_dias_retraso | filas_sin_pago 
+------------------+------------------------+------------------------+----------------
+              961 |                   3229 |                   3229 |              3
+(1 row)
+
+ pedidos | pedidos_sin_resena | pedidos_sin_entrega 
+---------+--------------------+---------------------
+   99441 |                768 |                2965
+(1 row)
+
+          control           | resultado 
+----------------------------+-----------
+ vendedores sin coordenadas |         7
+ productos sin peso         |         6
+ productos sin_categoria    |       610
+ clientes sin coordenadas   |       268
+(4 rows)
+
+ ingresos_price |   fletes   |    pagos    | items_vendidos | pedidos_distintos 
+----------------+------------+-------------+----------------+-------------------
+    13591643.70 | 2251909.54 | 16008872.12 |         112650 |             99441
+(1 row)
+
+ estado_pedido | pedidos 
+---------------+---------
+ delivered     |   96478
+ shipped       |    1107
+ canceled      |     625
+ unavailable   |     609
+ invoiced      |     314
+ processing    |     301
+ created       |       5
+ approved      |       2
+(8 rows)
+
+ primera_compra | ultima_compra 
+----------------+---------------
+ 2016-09-04     | 2018-10-17
+(1 row)
+
+ puntaje_prom | dias_entrega_prom 
+--------------+-------------------
+       4.0864 |             12.09
+(1 row)
+

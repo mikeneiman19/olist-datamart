@@ -1,0 +1,29 @@
+psql:scripts/01_crear_tablas.sql:14: NOTICE:  table "fact_ventas" does not exist, skipping
+DROP TABLE
+psql:scripts/01_crear_tablas.sql:15: NOTICE:  table "dim_tiempo" does not exist, skipping
+DROP TABLE
+psql:scripts/01_crear_tablas.sql:16: NOTICE:  table "dim_producto" does not exist, skipping
+DROP TABLE
+psql:scripts/01_crear_tablas.sql:17: NOTICE:  table "dim_vendedor" does not exist, skipping
+DROP TABLE
+psql:scripts/01_crear_tablas.sql:18: NOTICE:  table "dim_cliente" does not exist, skipping
+DROP TABLE
+psql:scripts/01_crear_tablas.sql:19: NOTICE:  table "dim_pago" does not exist, skipping
+DROP TABLE
+psql:scripts/01_crear_tablas.sql:20: NOTICE:  table "dim_estado_pedido" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+COMMENT

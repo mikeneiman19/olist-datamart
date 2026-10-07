@@ -1,0 +1,32 @@
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+psql:scripts/04_vistas_funciones.sql:127: NOTICE:  function fn_kpis(date,date,pg_catalog.varchar,pg_catalog.varchar) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:128: NOTICE:  function fn_ventas_por_mes(date,date,pg_catalog.varchar,pg_catalog.varchar) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:129: NOTICE:  function fn_ventas_por_categoria(date,date,pg_catalog.varchar,pg_catalog.int4) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:130: NOTICE:  function fn_logistica_por_estado(date,date,pg_catalog.varchar) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:131: NOTICE:  function fn_top_vendedores(pg_catalog.int4,date,date,pg_catalog.varchar) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:132: NOTICE:  function fn_pagos_por_tipo(date,date,pg_catalog.varchar,pg_catalog.varchar) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:133: NOTICE:  function fn_resena_vs_entrega(date,date,pg_catalog.varchar,pg_catalog.varchar) does not exist, skipping
+DROP FUNCTION
+psql:scripts/04_vistas_funciones.sql:134: NOTICE:  function fn_detalle_pedidos(date,date,pg_catalog.varchar,pg_catalog.varchar,pg_catalog.int4,pg_catalog.int4) does not exist, skipping
+DROP FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION

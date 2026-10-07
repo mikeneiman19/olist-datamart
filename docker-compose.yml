@@ -1,0 +1,82 @@
+# =====================================================================
+# Entregable 2 - Data Mart Olist en PostgreSQL (todo en Docker)
+#
+#  Paso 1  docker compose up -d                 -> levanta PostgreSQL
+#  Paso 2  docker compose run --rm etl          -> limpia los CSV (Python)
+#  Paso 3  docker compose run --rm loader       -> crea tablas, carga, valida
+#                                                  y crea vistas/funciones
+#  (opcional) docker compose --profile tools up -d  -> pgAdmin en :5050
+#  Apagar: docker compose down   (borrar tambien los datos: down -v)
+# =====================================================================
+services:
+  postgres:
+    image: postgres:17
+    container_name: bi-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bi_user
+      POSTGRES_PASSWORD: bi_password
+      POSTGRES_DB: bi_database
+    ports:
+      - "5432:5432"          # si ya tienes PostgreSQL local, cambia a "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bi_user -d bi_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Limpieza y transformacion: olist_raw/*.csv  ->  datos_limpios/*.csv
+  etl:
+    image: python:3.12-slim
+    container_name: bi-etl
+    profiles: ["etl"]
+    working_dir: /work
+    volumes:
+      - ./:/work
+    command: >
+      bash -c "pip install --no-cache-dir -q pandas numpy &&
+               python scripts/00_etl_limpieza.py --origen olist_raw --destino datos_limpios"
+
+  # Crea tablas, carga datos, valida y crea vistas/funciones (usa psql)
+  loader:
+    image: postgres:17
+    container_name: bi-loader
+    profiles: ["load"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /work
+    environment:
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGUSER: bi_user
+      PGPASSWORD: bi_password
+      PGDATABASE: bi_database
+    volumes:
+      - ./:/work
+    entrypoint: ["bash", "scripts/run_pipeline.sh"]
+
+  # Interfaz grafica opcional (para la captura de evidencia)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: bi-pgadmin
+    profiles: ["tools"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "5050:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:
