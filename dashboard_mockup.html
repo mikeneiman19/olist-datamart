@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard BI Olist - Mockup</title>
+<style>
+  :root {
+    --bg: #f4f6fb; --card: #ffffff; --ink: #1b2437; --muted: #6b7690;
+    --line: #e3e8f2; --brand: #1f3864; --accent: #2f6fed;
+    --good: #1a9b6c; --warn: #d98a00; --bad: #d64545;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+  header { background: var(--brand); color: #fff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  header h1 { font-size: 20px; font-weight: 600; }
+  header p { font-size: 13px; opacity: .8; margin-top: 2px; }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filters label { font-size: 11px; display: block; opacity: .8; margin-bottom: 3px; }
+  .filters select { padding: 6px 10px; border-radius: 6px; border: none; font-size: 13px; min-width: 130px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 32px 40px; }
+  .grid-kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .kpi .value { font-size: 28px; font-weight: 700; margin-top: 6px; }
+  .kpi .desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi.good .value { color: var(--good); }
+  .kpi.warn .value { color: var(--warn); }
+  .row { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; margin-top: 16px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .panel h2 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .panel .sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  svg { width: 100%; height: auto; display: block; }
+  .bars { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: grid; grid-template-columns: 120px 1fr 52px; align-items: center; gap: 10px; font-size: 13px; }
+  .bar-track { background: #eef2fa; border-radius: 6px; height: 14px; overflow: hidden; }
+  .bar-fill { background: var(--accent); height: 100%; border-radius: 6px; }
+  .bar-row span:last-child { text-align: right; color: var(--muted); font-size: 12px; }
+  .star { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .note { margin-top: 20px; padding: 12px 16px; background: #fff7e0; border: 1px solid #f0d98a; border-radius: 10px; font-size: 12.5px; color: #6b5300; }
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding: 0 0 28px; }
+  @media (max-width: 900px) {
+    .grid-kpi { grid-template-columns: repeat(2, 1fr); }
+    .row { grid-template-columns: 1fr; }
+    main, header { padding-left: 16px; padding-right: 16px; }
+  }
+  @media (max-width: 520px) {
+    .grid-kpi { grid-template-columns: 1fr; }
+    .bar-row { grid-template-columns: 90px 1fr 46px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Dashboard de Ventas &middot; Data Mart Olist</h1>
+    <p>Mockup &middot; fuente: PostgreSQL <code>bi_database</code> &middot; función <code>fn_kpis()</code></p>
+  </div>
+  <div class="filters">
+    <div><label>Fecha inicial</label><select><option>2016-09-04</option><option>2017-01-01</option></select></div>
+    <div><label>Fecha final</label><select><option>2018-10-17</option></select></div>
+    <div><label>Estado del cliente</label><select><option>Todos</option><option>SP</option><option>RJ</option><option>MG</option></select></div>
+  </div>
+</header>
+
+<main>
+  <section class="grid-kpi" aria-label="Indicadores clave">
+    <div class="kpi"><div class="label">Ingresos totales</div><div class="value">13.494.400,74</div><div class="desc">Ingresos generados por las ventas</div></div>
+    <div class="kpi"><div class="label">Total de pedidos</div><div class="value">99.441</div><div class="desc">Pedidos distintos</div></div>
+    <div class="kpi"><div class="label">Ticket promedio</div><div class="value">137,41</div><div class="desc">Valor promedio por compra</div></div>
+    <div class="kpi good"><div class="label">Entregas a tiempo</div><div class="value">91,89 %</div><div class="desc">Dentro del plazo prometido</div></div>
+    <div class="kpi"><div class="label">Tiempo de entrega</div><div class="value">12,09 días</div><div class="desc">Promedio compra &rarr; entrega</div></div>
+    <div class="kpi good"><div class="label">Puntaje de reseñas</div><div class="value">4,09 / 5</div><div class="desc">Calificación promedio</div></div>
+    <div class="kpi warn"><div class="label">Clientes recurrentes</div><div class="value">3,04 %</div><div class="desc">Compraron más de una vez</div></div>
+    <div class="kpi"><div class="label">Cancelación</div><div class="value">1,24 %</div><div class="desc">Pedidos cancelados</div></div>
+  </section>
+
+  <section class="row">
+    <div class="panel">
+      <h2>Ingresos por mes</h2>
+      <div class="sub">Gráfico ilustrativo &middot; vendría de fact_ventas + dim_tiempo</div>
+      <svg viewBox="0 0 600 240" role="img" aria-label="Barras de ingresos mensuales de ejemplo">
+        <g stroke="#e3e8f2" stroke-width="1">
+          <line x1="40" y1="20" x2="590" y2="20"/><line x1="40" y1="80" x2="590" y2="80"/>
+          <line x1="40" y1="140" x2="590" y2="140"/><line x1="40" y1="200" x2="590" y2="200"/>
+        </g>
+        <g fill="#2f6fed">
+          <rect x="52"  y="170" width="32" height="30" rx="4"/>
+          <rect x="97"  y="150" width="32" height="50" rx="4"/>
+          <rect x="142" y="125" width="32" height="75" rx="4"/>
+          <rect x="187" y="110" width="32" height="90" rx="4"/>
+          <rect x="232" y="85"  width="32" height="115" rx="4"/>
+          <rect x="277" y="95"  width="32" height="105" rx="4"/>
+          <rect x="322" y="70"  width="32" height="130" rx="4"/>
+          <rect x="367" y="55"  width="32" height="145" rx="4"/>
+          <rect x="412" y="40"  width="32" height="160" rx="4"/>
+          <rect x="457" y="60"  width="32" height="140" rx="4"/>
+          <rect x="502" y="35"  width="32" height="165" rx="4"/>
+          <rect x="547" y="45"  width="32" height="155" rx="4"/>
+        </g>
+        <g fill="#6b7690" font-size="11" text-anchor="middle">
+          <text x="68" y="218">Ene</text><text x="113" y="218">Feb</text><text x="158" y="218">Mar</text>
+          <text x="203" y="218">Abr</text><text x="248" y="218">May</text><text x="293" y="218">Jun</text>
+          <text x="338" y="218">Jul</text><text x="383" y="218">Ago</text><text x="428" y="218">Sep</text>
+          <text x="473" y="218">Oct</text><text x="518" y="218">Nov</text><text x="563" y="218">Dic</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="panel">
+      <h2>Top categorías de producto</h2>
+      <div class="sub">Datos ilustrativos &middot; vendría de <code>fn_ventas_por_categoria()</code></div>
+      <div class="bars">
+        <div class="bar-row"><span>Categoría A</span><div class="bar-track"><div class="bar-fill" style="width:92%"></div></div><span>92 %</span></div>
+        <div class="bar-row"><span>Categoría B</span><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><span>78 %</span></div>
+        <div class="bar-row"><span>Categoría C</span><div class="bar-track"><div class="bar-fill" style="width:64%"></div></div><span>64 %</span></div>
+        <div class="bar-row"><span>Categoría D</span><div class="bar-track"><div class="bar-fill" style="width:49%"></div></div><span>49 %</span></div>
+        <div class="bar-row"><span>Categoría E</span><div class="bar-track"><div class="bar-fill" style="width:33%"></div></div><span>33 %</span></div>
+      </div>
+      <div class="star">Porcentaje relativo respecto a la categoría líder.</div>
+    </div>
+  </section>
+
+  <div class="note">
+    <strong>Aviso:</strong> los 8 KPI de arriba son los valores reales obtenidos con <code>fn_kpis()</code>.
+    Los gráficos de ingresos por mes y categorías son datos de ejemplo para mostrar el diseño del dashboard.
+  </div>
+</main>
+
+<footer>Data Mart Olist &middot; modelo estrella en PostgreSQL con Docker &middot; github.com/mikeneiman19/olist-datamart</footer>
+
+</body>
+</html>
