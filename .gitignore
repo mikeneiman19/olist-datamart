@@ -1,0 +1,5 @@
+olist_raw/
+datos_limpios/
+*.csv
+.env
+__pycache__/
