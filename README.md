@@ -84,3 +84,9 @@ SELECT * FROM fn_ventas_por_categoria(p_top => 10);
 
 ## Texto sugerido para la sección 6 del informe ("Instalación y configuración")
 > Se usó Docker Compose con la imagen oficial `postgres:17` (contenedor `bi-postgres`, puerto 5432, base `bi_database`, usuario `bi_user`, volumen persistente `postgres_data`). El ETL en Python (pandas) corre en un contenedor `python:3.12-slim` y la carga/validación con `psql` en un contenedor `postgres:17`, de modo que el entorno es aislado y reproducible con `docker compose up -d`. Sistema operativo anfitrión: Windows 10. Cliente gráfico: pgAdmin 4 (captura adjunta).
+>
+> ## Dashboard (mockup)
+
+Mockup del dashboard con los 8 KPI del Data Mart. Los gráficos de ingresos por mes y categorías son ilustrativos.
+
+[Ver el dashboard](https://mikeneiman19.github.io/olist-datamart/dashboard_mockup.html)
