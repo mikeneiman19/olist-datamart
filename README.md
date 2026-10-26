@@ -1,92 +1,172 @@
-# Entregable 2 · Data Mart Olist en PostgreSQL con Docker
+# Data Mart Olist + Dashboard Streamlit
 
-Todo corre en contenedores: no necesitas instalar PostgreSQL ni Python.
+**Materia:** Inteligencia de Negocios · UPSE · Carrera de Software
+**Estudiante:** Tomalá Tumbaco Mike Neiman
+**Docente:** Ing. Anthony Abrahan Pachay Espinoza, MSc.
+**Entregable 3:** Mi primer dashboard (solución analítica completa)
+
+Solución de Business Intelligence de extremo a extremo con el dataset
+[Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce):
+
+```
+CSV de Kaggle -> ETL (Python/pandas) -> PostgreSQL (modelo estrella)
+              -> Vista y funciones SQL -> Streamlit (dashboard)
+```
+
+La aplicación Streamlit **no lee los CSV**: todos los KPI, gráficos y tablas
+salen de PostgreSQL.
+
+## Preguntas de negocio
+
+| N.º | Pregunta |
+|---|---|
+| P1 | ¿Qué categorías y estados generan más ingresos y cómo evolucionan las ventas por mes? |
+| P2 | ¿Qué tan bien se cumplen los plazos de entrega y en qué regiones hay más demora? |
+| P3 | ¿Cómo se relaciona el retraso en la entrega con la satisfacción del cliente? |
+
+## Modelo dimensional
+
+Esquema en estrella. **Granularidad:** una fila de `fact_ventas` representa un
+ítem vendido dentro de un pedido (`order_id` + `order_item_id`).
+
+- Tabla de hechos: `fact_ventas` (113.425 filas)
+- Dimensiones: `dim_tiempo`, `dim_cliente`, `dim_producto`, `dim_vendedor`,
+  `dim_pago`, `dim_estado_pedido`
+
+## Requisitos
+
+- Windows, macOS o Linux
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) en ejecución
+- Git (opcional, para clonar el repositorio)
+
+No hace falta instalar PostgreSQL ni Python: todo corre en contenedores.
+
+## Estructura del proyecto
 
 ```
 olist-datamart/
-├── docker-compose.yml      <- postgres + etl + loader + pgadmin (opcional)
-├── olist_raw/              <- aquí van los 9 CSV de Kaggle
-├── datos_limpios/          <- los genera el ETL
-├── evidencia/              <- salidas de cada script (para tu informe)
-├── pgadmin/servers.json
-└── scripts/                <- 00 ETL · 01 tablas · 02 carga · 03 validación · 04 vistas/funciones · 05 pruebas
+├── docker-compose.yml            PostgreSQL + ETL + loader + pgAdmin (opcional)
+├── docker-compose.override.yml   Servicio de la app Streamlit
+├── app/
+│   ├── app.py                    Dashboard Streamlit
+│   └── requirements.txt          Dependencias de Python
+├── scripts/
+│   ├── 00_etl_limpieza.py        Limpieza y transformación
+│   ├── 01_crear_tablas.sql       Creación del modelo estrella
+│   ├── 02_carga.sql              Carga de datos
+│   ├── 03_validacion.sql         Consultas de validación
+│   ├── 04_vistas_funciones.sql   Vistas y funciones (Entregable 2)
+│   ├── 05_prueba_funciones.sql   Pruebas
+│   └── 06_vistas_app.sql         Vista y funciones para la app (Entregable 3)
+├── evidencia/                    Salidas de cada script
+├── olist_raw/                    CSV originales (NO se suben a GitHub)
+└── datos_limpios/                CSV generados por el ETL (NO se suben)
 ```
 
-Credenciales: host `localhost` · puerto `5432` · base `bi_database` · usuario `bi_user` · contraseña `bi_password`.
+## Ejecución paso a paso
 
-## Paso 0 · Requisitos
-1. Docker Desktop instalado y **abierto** (`docker --version` y `docker compose version` deben responder).
-2. Descarga el dataset de https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce, descomprime `archive.zip` y copia los 9 CSV dentro de `olist_raw/`.
+Ejecutar todos los comandos desde la carpeta del proyecto.
 
-## Paso 1 · Levantar PostgreSQL
-```bash
-docker compose up -d
-docker compose ps          # bi-postgres debe decir "healthy"
+### 1. Descargar los datos
+Descargar los 9 CSV desde Kaggle y copiarlos en la carpeta `olist_raw/`.
+
+### 2. Levantar PostgreSQL
 ```
-📸 Captura 1: `docker compose ps` + `docker exec bi-postgres psql -U bi_user -d bi_database -c "SELECT version();"`
+docker compose up -d postgres
+docker compose ps
+```
+Esperar a que `bi-postgres` aparezca como `healthy`.
 
-## Paso 2 · Limpiar y transformar (ETL)
-```bash
+### 3. Ejecutar el ETL
+```
 docker compose run --rm etl
 ```
-Genera 7 CSV en `datos_limpios/` y `reporte_limpieza.txt` (conteo de cada transformación → sección 5 del informe).
+Genera los CSV limpios en `datos_limpios/` y el reporte `reporte_limpieza.txt`.
 
-## Paso 3 · Crear tablas, cargar, validar y crear vistas/funciones
-```bash
+### 4. Crear tablas, cargar y validar
+```
 docker compose run --rm loader
 ```
-Ejecuta `01` → `05` en orden y guarda la salida en `evidencia/`. Se detiene ante el primer error.
-📸 Captura 2: salida de `02_carga` (COPY ...) y 03_validacion (compara con "esperado").
+Ejecuta los scripts 01 a 05 y guarda la salida en `evidencia/`.
 
-Para repetir desde cero (es re-ejecutable): `docker compose run --rm loader`
-Para borrar TODO y empezar limpio: `docker compose down -v`
+### 5. Crear la vista y funciones para la aplicación
+```
+docker compose exec -T postgres psql -U bi_user -d bi_database < scripts/06_vistas_app.sql
+```
+Debe mostrar `CREATE VIEW` y dos veces `CREATE FUNCTION`.
 
-## Paso 4 · Explorar con pgAdmin (opcional, para capturas)
-```bash
+### 6. Levantar la aplicación Streamlit
+```
+docker compose up -d app
+```
+La primera vez instala las librerías (1 a 3 minutos). Abrir en el navegador:
+
+**http://localhost:8501**
+
+Para ver el estado o los errores:
+```
+docker compose logs app --tail 40
+```
+
+### 7. (Opcional) Explorar con pgAdmin
+```
 docker compose --profile tools up -d
 ```
-Abre http://localhost:5050 → servidor "BI Olist (Docker)" → contraseña `bi_password`.
-📸 Captura 3: Schemas → public → Tables (las 7 tablas) y el diagrama ERD (clic derecho en la base → ERD).
+Abrir http://localhost:5050, elegir el servidor "BI Olist (Docker)" e ingresar la
+contraseña `bi_password`.
 
-También puedes usar DBeaver con los datos de conexión de arriba (host `localhost`).
+## Credenciales de la base de datos (uso académico)
 
-## Paso 5 · Probar las funciones a mano
-```bash
-docker exec -it bi-postgres psql -U bi_user -d bi_database
-```
-```sql
-SELECT * FROM fn_kpis();
-SELECT * FROM fn_kpis(p_fecha_ini => '2017-01-01', p_estado_cliente => 'SP');
-SELECT * FROM fn_ventas_por_categoria(p_top => 10);
-\dt      -- tablas
-\dv      -- vistas
-\df fn_* -- funciones
-```
-
-## Resultados esperados (de tu PDF)
-| Control | Esperado |
+| Dato | Valor |
 |---|---|
-| Filas | fact 113,425 · cliente 96,096 · producto 32,952 · vendedor 3,096 · tiempo 1,096 · pago 19 · estado 12 |
-| Huérfanos por FK / grano duplicado / es_primer_item mal | 0 |
-| SUM(price) / SUM(freight_value) / SUM(payment_value) | 13,591,643.70 / 2,251,909.54 / 16,008,872.12 |
-| Ítems / pedidos | 112,650 / 99,441 |
-| Pedidos sin reseña / sin entrega | 768 / 2,965 |
-| fn_kpis() | ingresos 13,494,400.74 · ticket 137.41 · a tiempo 91.89 % · entrega 12.09 d · reseña 4.09 · recurrentes 3.04 % · cancelación 1.24 % |
+| Base de datos | `bi_database` |
+| Usuario | `bi_user` |
+| Contraseña | `bi_password` |
+| Puerto | `5432` |
 
-## Problemas frecuentes
-| Síntoma | Solución |
+## Verificación rápida desde consola
+
+```
+docker compose exec postgres psql -x -P pager=off -U bi_user -d bi_database -c "SELECT * FROM fn_kpis_filtrado();"
+```
+Resultado esperado sin filtros: ingresos 13.494.400,74 · 98.199 pedidos ·
+ticket 137,42 · 91,89 % de entregas a tiempo · 12,09 días · puntaje 4,09 ·
+1,24 % de cancelación.
+
+Con filtros (fecha inicial, fecha final, estado del cliente, categoría):
+```
+docker compose exec postgres psql -x -P pager=off -U bi_user -d bi_database -c "SELECT * FROM fn_kpis_filtrado('2018-01-01','2018-06-30','SP',NULL);"
+```
+`NULL` significa "sin filtro".
+
+## Objetos SQL que consume la aplicación
+
+| Objeto | Descripción |
 |---|---|
-| `port is already allocated` (5432) | Tienes otro PostgreSQL local: cambia a `"5433:5432"` en el compose y vuelve a `docker compose up -d`. |
-| `falta datos_limpios/...csv` | Corre primero el Paso 2. |
-| `FileNotFoundError ... olist_raw` | Los CSV no están en `olist_raw/` (sin subcarpeta). |
-| `could not connect` en loader | Espera a que postgres esté `healthy` (`docker compose ps`). |
-| Cambié un script SQL y quiero rehacerlo | `docker compose run --rm loader` (01 borra y recrea las tablas). |
+| `vw_ventas_app` | Vista que une `fact_ventas` con las 6 dimensiones |
+| `fn_kpis_filtrado(fecha_ini, fecha_fin, estado, categoria)` | KPI con filtros opcionales |
+| `fn_ingresos_mensuales(fecha_ini, fecha_fin, estado, categoria)` | Ingresos y pedidos por mes |
 
-## Texto sugerido para la sección 6 del informe ("Instalación y configuración")
-> Se usó Docker Compose con la imagen oficial `postgres:17` (contenedor `bi-postgres`, puerto 5432, base `bi_database`, usuario `bi_user`, volumen persistente `postgres_data`). El ETL en Python (pandas) corre en un contenedor `python:3.12-slim` y la carga/validación con `psql` en un contenedor `postgres:17`, de modo que el entorno es aislado y reproducible con `docker compose up -d`. Sistema operativo anfitrión: Windows 10. Cliente gráfico: pgAdmin 4 (captura adjunta).
->
- ## Dashboard (mockup)
+## Contenido de la aplicación
 
-Mockup del dashboard con los 8 KPI del Data Mart. Los gráficos de ingresos por mes y categorías son ilustrativos.
+| Sección | KPI | Gráficos | Detalle |
+|---|---|---|---|
+| Ventas e ingresos | Ingresos totales, total de pedidos, ticket promedio | Evolución mensual · Top 10 categorías | Top 20 vendedores |
+| Entregas y satisfacción | % entregas a tiempo, tiempo promedio de entrega, puntaje de reseña | Puntaje según retraso · Días de entrega por estado | 100 pedidos con mayor retraso |
 
-[Ver el dashboard](https://mikeneiman19.github.io/olist-datamart/dashboard_mockup.html)
+**Filtros** (barra lateral, afectan a todas las consultas): rango de fechas de
+compra, estado del cliente y categoría de producto.
+
+## Detener el entorno
+
+```
+docker compose down
+```
+Los datos se conservan en el volumen `postgres_data`.
+
+## Uso de Inteligencia Artificial
+
+Se utilizó IA generativa como apoyo para diseñar la vista y funciones SQL,
+construir la aplicación Streamlit, resolver errores y configurar Git. El detalle
+de cada uso (problema, prompt, solución, ajustes y validación) se documenta en el
+informe final.
