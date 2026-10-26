@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup Dashboard Olist BI</title>
+<style>
+  :root { --bg:#f6f7f9; --side:#eceff3; --card:#fff; --ink:#262730; --mute:#7a7f8c; --blue:#1f77b4; --line:#dfe3e8; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Segoe UI",Arial,sans-serif; background:var(--bg); color:var(--ink); }
+  .wrap { display:flex; min-height:100vh; }
+  aside { width:250px; background:var(--side); padding:20px 16px; border-right:1px solid var(--line); }
+  aside h2 { margin:0 0 14px; font-size:20px; }
+  aside h3 { margin:22px 0 8px; font-size:15px; }
+  label.f { display:block; font-size:12px; color:var(--mute); margin:12px 0 4px; }
+  .box { background:#fff; border:1px solid var(--line); border-radius:6px; padding:8px 10px; font-size:13px; }
+  .nav label { display:block; font-size:14px; margin:6px 0; cursor:pointer; }
+  main { flex:1; padding:24px 32px; }
+  h1 { margin:0 0 4px; font-size:30px; }
+  .cap { color:var(--mute); font-size:12px; margin-bottom:18px; }
+  .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:22px; }
+  .kpi { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px 16px; }
+  .kpi small { color:var(--mute); font-size:12px; }
+  .kpi b { display:block; font-size:28px; font-weight:400; margin-top:4px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:22px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px 16px; }
+  .panel h3 { margin:0 0 10px; font-size:16px; }
+  .bars { display:flex; align-items:flex-end; gap:8px; height:150px; border-bottom:1px solid var(--line); }
+  .bars div { flex:1; background:var(--blue); border-radius:3px 3px 0 0; }
+  .lbl { display:flex; gap:8px; font-size:10px; color:var(--mute); margin-top:4px; }
+  .lbl span { flex:1; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  svg { width:100%; height:150px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th { text-align:left; color:var(--mute); font-weight:500; border-bottom:1px solid var(--line); padding:6px; }
+  td { border-bottom:1px solid #eef0f3; padding:6px; }
+  td.n { text-align:right; }
+  .note { font-size:11px; color:var(--mute); margin-top:14px; }
+  .sec { display:none; }
+  #s1:checked ~ .wrap #sec1, #s2:checked ~ .wrap #sec2 { display:block; }
+  input.radio { display:none; }
+  @media (max-width:800px){ .wrap{flex-direction:column;} aside{width:100%;} .kpis,.grid2{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<input class="radio" type="radio" name="sec" id="s1" checked>
+<input class="radio" type="radio" name="sec" id="s2">
+<div class="wrap">
+  <aside>
+    <h2>📦 Olist BI</h2>
+    <div class="nav">
+      <label class="f">Sección</label>
+      <label for="s1">◉ Ventas e ingresos</label>
+      <label for="s2">○ Entregas y satisfacción</label>
+    </div>
+    <h3>Filtros</h3>
+    <label class="f">Rango de fechas de compra</label>
+    <div class="box">2016/09/04 – 2018/10/17</div>
+    <label class="f">Estado del cliente</label>
+    <div class="box">Todos ▾</div>
+    <label class="f">Categoría de producto</label>
+    <div class="box">Todas ▾</div>
+    <p class="note">Los 3 filtros afectan a todos los KPI, gráficos y tablas. Datos: PostgreSQL (bi_database).</p>
+  </aside>
+
+  <main>
+    <!-- SECCIÓN 1 -->
+    <section class="sec" id="sec1">
+      <h1>Ventas e ingresos</h1>
+      <div class="cap">P1: ¿Qué categorías y estados generan más ingresos y cómo evolucionan las ventas por mes?</div>
+      <div class="kpis">
+        <div class="kpi"><small>Ingresos totales (R$)</small><b>13,494,400.74</b></div>
+        <div class="kpi"><small>Total de pedidos</small><b>98,199</b></div>
+        <div class="kpi"><small>Ticket promedio (R$)</small><b>137.42</b></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h3>Evolución mensual de ingresos</h3>
+          <svg viewBox="0 0 300 150" preserveAspectRatio="none">
+            <polyline fill="none" stroke="#1f77b4" stroke-width="2"
+              points="5,145 30,135 55,145 80,120 105,95 130,75 155,80 180,60 205,70 230,45 255,50 280,35"/>
+          </svg>
+          <div class="lbl"><span>2016-09</span><span>2017-06</span><span>2018-03</span><span>2018-08</span></div>
+        </div>
+        <div class="panel"><h3>Top 10 categorías por ingresos</h3>
+          <div class="bars">
+            <div style="height:100%"></div><div style="height:95%"></div><div style="height:82%"></div><div style="height:78%"></div><div style="height:70%"></div>
+            <div style="height:58%"></div><div style="height:50%"></div><div style="height:49%"></div><div style="height:46%"></div><div style="height:40%"></div>
+          </div>
+          <div class="lbl"><span>health_beauty</span><span>watches_gifts</span><span>bed_bath</span><span>sports</span><span>computers</span><span>furniture</span><span>housewares</span><span>cool_stuff</span><span>auto</span><span>garden</span></div>
+        </div>
+      </div>
+      <div class="panel"><h3>Detalle: Top 20 vendedores por ingresos</h3>
+        <table>
+          <tr><th>Vendedor (ID)</th><th>Estado</th><th class="n">Pedidos</th><th class="n">Ingresos (R$)</th><th class="n">Puntaje prom.</th></tr>
+          <tr><td>4869f7a5dfa277a7...</td><td>SP</td><td class="n">1,131</td><td class="n">229,237.63</td><td class="n">4.13</td></tr>
+          <tr><td>53243585a1d6dc26...</td><td>BA</td><td class="n">358</td><td class="n">222,776.05</td><td class="n">4.08</td></tr>
+          <tr><td>4a3ca9315b744ce9...</td><td>SP</td><td class="n">1,804</td><td class="n">200,326.12</td><td class="n">3.80</td></tr>
+          <tr><td>... (20 filas)</td><td></td><td></td><td></td><td></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2 -->
+    <section class="sec" id="sec2">
+      <h1>Entregas y satisfacción</h1>
+      <div class="cap">P2: ¿Qué tan bien se cumplen los plazos? P3: ¿Cómo se relaciona el retraso con la satisfacción?</div>
+      <div class="kpis">
+        <div class="kpi"><small>% entregas a tiempo</small><b>91.89 %</b></div>
+        <div class="kpi"><small>Tiempo prom. de entrega</small><b>12.09 días</b></div>
+        <div class="kpi"><small>Puntaje promedio de reseña</small><b>4.09 / 5</b></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h3>Puntaje de reseña según retraso</h3>
+          <div class="bars"><div style="height:96%"></div><div style="height:70%"></div><div style="height:38%"></div></div>
+          <div class="lbl"><span>1. A tiempo</span><span>2. 1-7 días tarde</span><span>3. Más de 7 días tarde</span></div>
+        </div>
+        <div class="panel"><h3>Días promedio de entrega por estado (Top 10)</h3>
+          <div class="bars">
+            <div style="height:95%"></div><div style="height:76%"></div><div style="height:74%"></div><div style="height:72%"></div><div style="height:72%"></div>
+            <div style="height:71%"></div><div style="height:63%"></div><div style="height:58%"></div><div style="height:58%"></div><div style="height:42%"></div>
+          </div>
+          <div class="lbl"><span>BA</span><span>ES</span><span>GO</span><span>RJ</span><span>RS</span><span>SC</span><span>DF</span><span>MG</span><span>PR</span><span>SP</span></div>
+        </div>
+      </div>
+      <div class="panel"><h3>Detalle: 100 pedidos con mayor retraso</h3>
+        <table>
+          <tr><th>Pedido (ID)</th><th>Fecha de compra</th><th>Estado</th><th>Categoría</th><th class="n">Días de entrega</th><th class="n">Días de retraso</th><th class="n">Puntaje</th></tr>
+          <tr><td>1b3190b2dfa9d789...</td><td>2018-02-23</td><td>RJ</td><td>cool_stuff</td><td class="n">208</td><td class="n">189</td><td class="n">2</td></tr>
+          <tr><td>ca07593549f1816d...</td><td>2017-02-21</td><td>ES</td><td>auto</td><td class="n">209</td><td class="n">182</td><td class="n">—</td></tr>
+          <tr><td>... (100 filas)</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <p class="note">Mockup del Entregable 3. Los KPI muestran los valores reales sin filtros. Los gráficos son ilustrativos y reproducen la distribución de la aplicación Streamlit. Todos los datos de la app provienen de PostgreSQL (vw_ventas_app, fn_kpis_filtrado, fn_ingresos_mensuales).</p>
+  </main>
+</div>
+</body>
+</html>
