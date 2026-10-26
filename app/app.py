@@ -115,6 +115,17 @@ if pagina == "Ventas":
         else:
             grafico_barras(c, "categoria", "ingresos", "Ingresos (R$)")
 
+    # ----- NUEVO: Top 10 estados por ingresos (cubre "estados" de P1) -----
+    st.subheader("Top 10 estados por ingresos")
+    s = query(f"""SELECT estado_cliente AS estado, ROUND(SUM(price),2) AS ingresos
+                  FROM vw_ventas_app
+                  WHERE es_cancelado = 0 AND cantidad_items > 0 AND {WHERE}
+                  GROUP BY estado_cliente ORDER BY ingresos DESC LIMIT 10""", P)
+    if s.empty:
+        st.info("Sin datos para los filtros seleccionados.")
+    else:
+        grafico_barras(s, "estado", "ingresos", "Ingresos (R$)", angulo=0)
+
     st.subheader("Detalle: Top 20 vendedores por ingresos")
     d = query(f"""SELECT seller_id AS vendedor, estado_vendedor AS estado,
                          COUNT(DISTINCT order_id) AS pedidos,
